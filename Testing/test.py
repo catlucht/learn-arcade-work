@@ -1,0 +1,5 @@
+print("Hello world")
+print("It was a dark and stormy night.")
+print("Suddenly a shot rang out!")
+print("My favorite quote is \"What a wonderful world\".")
+print("This\nis\na\nstring.")
