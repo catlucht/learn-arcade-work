@@ -1,1 +1,5 @@
-hi
+print("\tIn my free-time,\nI enjoy skateboarding.")
+print("\tI also enjoy reading,\nbut I don't do that too often.")
+print("\tI really enjoy the quote \"If your dream only includes you, it's too small\".")
+print("\tLiving in an apartment is 1000 times better than living in a dorm.")
+print("\tLastly, I am excited for everything I am going to learn in this course!")
