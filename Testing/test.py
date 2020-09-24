@@ -1,6 +1,6 @@
-name = "mary"
-if name.lower() == "bob" or "sam":
-    print("Yes")
-else:
-    print("No")
-
+class Dog():
+    def __init__(self):
+        self.age = 0
+        self.name = ""
+        self.weight = 0
+        print("A new dog!")
