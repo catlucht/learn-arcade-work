@@ -38,26 +38,8 @@ class Carrot(arcade.Sprite):
         if self.top < 0:
             self.reset()
 
-class Enemy(arcade.sprite):
-
-    def setup(self):
-        # Create the enemies
-        for i in range(ENEMY_COUNT):
-
-            # Create the enemy instance
-            # Enemy image from kenney.nl
-            enemy = Enemy("spikeBall1.png", SPRITE_SCALING_CARROT)
-
-            # Position the coin
-            enemy.center_x = random.randrange(SCREEN_WIDTH)
-            enemy.center_y = random.randrange(SCREEN_HEIGHT)
-
-            enemy.change_x = random.randrange(-3, 4)
-            enemy.change_y = random.randrange(-3, 4)
-
-            # Add the coin to the lists
-            self.enemy_list.append(enemy)
-
+class Enemy(arcade.Sprite):
+    pass
 
 class MyGame(arcade.Window):
 
@@ -100,7 +82,7 @@ class MyGame(arcade.Window):
         self.player_sprite.center_y = 50
         self.player_list.append(self.player_sprite)
 
-        # Create the coins
+        # Create the carrots
         for i in range(CARROT_COUNT):
 
             # Carrot image from kenney.nl
@@ -112,6 +94,25 @@ class MyGame(arcade.Window):
 
             # Add the carrot to the list
             self.carrot_list.append(carrot)
+
+        for row in range(30):
+
+            # Create the enemy instance
+            # Enemy image from kenney.nl
+            enemy = Enemy("spikeBall1.png", 0.3)
+
+            # Position the enemy
+            enemy.center_x = 400
+            enemy.center_y = 300
+
+            for column in range(30):
+                if column % 2 == 0:
+                    enemy.change_x = -3
+                else:
+                    enemy.change_y = 3
+
+            # Add the enemy to the lists
+            self.enemy_list.append(enemy)
 
     def on_draw(self):
         """ Draw everything """
@@ -149,16 +150,25 @@ class MyGame(arcade.Window):
 
         self.carrot_list.update()
         self.player_list.update()
+        self.enemy_list.update()
 
         # Generate a list of all sprites that collided with the player.
         carrots_hit_list = arcade.check_for_collision_with_list(self.player_sprite,
                                                               self.carrot_list)
+
+        enemy_hit_list = arcade.check_for_collision_with_list(self.player_sprite,
+                                                              self.enemy_list)
 
         # Loop through each colliding sprite, remove it, and add to the score.
         for carrot in carrots_hit_list:
             carrot.reset()
             self.score += 1
             arcade.play_sound(self.carrot_sound)
+
+        for enemy in enemy_hit_list:
+            enemy.reset()
+            self.score -= 1
+            arcade.play_sound(self.enemy1_sound)
 
 
 def main():
