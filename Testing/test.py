@@ -1,22 +1,12 @@
-"""
-Example using OpenPyXL to create an Excel worksheet
-"""
+class Book():
 
-from openpyxl import Workbook
-import random
+    def __init__(self):
+        self.title = ""
+        self.author = ""
+        self.pages = 0
 
-# Create an Excel workbook
-work_book = Workbook()
+def main():
+    my_book = Book()
+    my_book.pages = 295
 
-# Grab the active worksheet
-work_sheet = work_book.active
-
-# Data can be assigned directly to cells
-work_sheet['A1'] = "This is a test"
-
-# Rows can also be appended
-for i in range(200):
-    work_sheet.append(["Random Number:", random.randrange(1000)])
-
-# Save the file
-work_book.save("sample.xlsx")
+main()

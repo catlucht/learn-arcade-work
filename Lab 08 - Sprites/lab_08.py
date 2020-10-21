@@ -79,7 +79,6 @@ class MyGame(arcade.Window):
         self.carrot_sound = arcade.load_sound("coin3.wav")
         self.enemy1_sound = arcade.load_sound("hurt4.wav")
         self.enemy2_sound = arcade.load_sound("laser1.wav")
-        self.gold_carrot_sound = arcade.load_sound("secret2.wav")
 
         # Variables that will hold sprite lists
         self.player_list = None
