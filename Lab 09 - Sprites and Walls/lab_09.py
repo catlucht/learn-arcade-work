@@ -55,9 +55,17 @@ class MyGame(arcade.Window):
     def setup(self):
         """ Set up the game and initialize the variables. """
 
+        # Score
+        self.score = 0
+
+        # Used in scrolling
+        self.view_bottom = 0
+        self.view_left = 0
+
         # Sprite lists
         self.player_list = arcade.SpriteList()
         self.wall_list = arcade.SpriteList()
+        self.coin_list = arcade.SpriteList()
 
         # Set up the player
         # Ghost image from Emoji Island
@@ -227,17 +235,17 @@ class MyGame(arcade.Window):
 
         # -- Randomly place coins where there are no walls
         # Create the coins
-        for i in range(1):
+        for i in range(100):
 
             # Create the coin instance
-            # Coin image from kenney.nl
-            coin = arcade.Sprite("platformPack_item005.png", SPRITE_SCALING)
+            # Coin image from iconfinder.com
+            coin = arcade.Sprite("Skull_And_Bones_Bones_Halloween_Horror_Pirate_Skull_Dangerous_coin-512.png", 0.1)
 
             coin_placed_successfully = False
 
             while not coin_placed_successfully:
-                coin.center_x = random.randrange(SCREEN_WIDTH)
-                coin.center_y = random.randrange(SCREEN_HEIGHT)
+                coin.center_x = random.randrange(2000)
+                coin.center_y = random.randrange(2000)
 
                 # See if the coin is hitting anything
                 wall_hit_list = arcade.check_for_collision_with_list(coin, self.wall_list)
@@ -251,7 +259,7 @@ class MyGame(arcade.Window):
         self.physics_engine = arcade.PhysicsEngineSimple(self.player_sprite, self.wall_list)
 
         # Set the background color
-        arcade.set_background_color(arcade.color.BLACK_BEAN)
+        arcade.set_background_color(arcade.color.BULGARIAN_ROSE)
 
         # Set the viewport boundaries
         # These numbers set where we have 'scrolled' to.
@@ -270,6 +278,9 @@ class MyGame(arcade.Window):
         self.wall_list.draw()
         self.player_list.draw()
         self.coin_list.draw()
+
+        output = f"Score: {self.score}"
+        arcade.draw_text(output, 15 + self.view_left, 20 + self.view_bottom, arcade.color.GREEN_YELLOW, 20)
 
     def on_key_press(self, key, modifiers):
         """ Called whenever a key is pressed. """
@@ -343,7 +354,7 @@ class MyGame(arcade.Window):
                                 SCREEN_HEIGHT + self.view_bottom)
 
         # Generate a list of all sprites that collided with the player.
-        hit_list = arcade.check_for_collision_with_list(self.player_list, self.coin_list)
+        hit_list = arcade.check_for_collision_with_list(self.player_sprite, self.coin_list)
         for carrot in hit_list:
             carrot.remove_from_sprite_lists()
             self.score += 1
