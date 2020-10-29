@@ -1,49 +1,93 @@
+"""
+Platformer Game
+"""
 import arcade
 
-WIDTH = 50
-HEIGHT = 50
-MARGIN = 5
-ROW_COUNT = 10
-COLUMN_COUNT = 10
+# Constants
+SCREEN_WIDTH = 1000
+SCREEN_HEIGHT = 650
+SCREEN_TITLE = "Platformer"
+CHARACTER_SCALING = 0.5
+GRAVITY = 1
 
-SCREEN_HEIGHT = HEIGHT * ROW_COUNT + (MARGIN + 1) * ROW_COUNT
-SCREEN_WIDTH = WIDTH * COLUMN_COUNT + (MARGIN + 1) * COLUMN_COUNT
+PLAYER_MOVEMENT_SPEED = 5
 
 class MyGame(arcade.Window):
     """
     Main application class.
     """
 
-    def __init__(self, width, height):
-        super().__init__(width, height)
+    def __init__(self):
 
-        arcade.set_background_color(arcade.color.BLACK)
+        # Call the parent class and set up the window
+        super().__init__(SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_TITLE)
+
+        arcade.set_background_color(arcade.csscolor.CORNFLOWER_BLUE)
+
+        self.player_list = None
+        self.wall_list = None
+        self.coin_list = None
+
+        self.physics_engine = None
+
+    def setup(self):
+        """ Set up the game here. Call this function to restart the game. """
+        self.player_list = arcade.SpriteList()
+        self.wall_list = arcade.SpriteList()
+        self.coin_list = arcade.SpriteList()
+
+        image_source = "character.png"
+        self.player_sprite = arcade.Sprite(image_source, CHARACTER_SCALING)
+        self.player_sprite.center_x = 64
+        self.player_sprite.center_y = 128
+        self.player_list.append(self.player_sprite)
+
+        for x in range(0, 1250, 64):
+            wall = arcade.Sprite("boxCrate_double.png", 0.5)
+            wall.center_x = x
+            wall.center_y = 32
+            self.wall_list.append(wall)
+
+        wall = arcade.Sprite("boxCrate_double.png", 0.5)
+        wall.center_x = 512
+        wall.center_y = 300
+        self.wall_list.append(wall)
+
+        self.physics_engine = arcade.PhysicsEnginePlatformer(self.player_sprite,
+                                                             self.wall_list,
+                                                             GRAVITY)
 
     def on_draw(self):
-        """
-        Render the screen.
-        """
+        """ Render the screen. """
 
         arcade.start_render()
+        # Code to draw the screen goes here
+        self.player_list.draw()
+        self.wall_list.draw()
+        self.coin_list.draw()
 
-        for row in range(ROW_COUNT):
-            for column in range(COLUMN_COUNT):
-                arcade.draw_rectangle_filled((WIDTH / 2) + (column * (WIDTH + MARGIN) + MARGIN),
-                                             (HEIGHT / 2) + (row * (HEIGHT + MARGIN)) + MARGIN,
-                                            WIDTH, HEIGHT,
-                                            arcade.color.ICTERINE)
+    def on_update(self, delta_time):
+        self.physics_engine.update()
 
+    def on_key_press(self, key, modifiers):
+        if key == arcade.key.LEFT:
+            self.player_sprite.change_x = -PLAYER_MOVEMENT_SPEED
+        elif key == arcade.key.RIGHT:
+            self.player_sprite.change_x = PLAYER_MOVEMENT_SPEED
+        elif key == arcade.key. UP:
+            if self.physics_engine.can_jump():
+                self.player_sprite.change_y = 20
 
-    def on_mouse_press(self, x, y, button, key_modifiers):
-        """
-        Called when the user presses a mouse button.
-        """
-        pass
-
+    def on_key_release(self, key, modifiers):
+        if key == arcade.key.LEFT:
+            self.player_sprite.change_x = 0
+        elif key == arcade.key.RIGHT:
+            self.player_sprite.change_x = 0
 
 def main():
-
-    window = MyGame(SCREEN_WIDTH, SCREEN_HEIGHT)
+    """ Main method """
+    window = MyGame()
+    window.setup()
     arcade.run()
 
 
