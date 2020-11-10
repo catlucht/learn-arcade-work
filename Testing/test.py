@@ -1,13 +1,9 @@
-def insertion_sort(my_list):
-    for key_pos in range(1, len(my_list)):
-        key_value = my_list[key_pos]
-        scan_pos = key_pos + 1
-        while (scan_pos >= 0) and (my_list[scan_pos] > key_value):
-            my_list[scan_pos + 1] = my_list[scan_pos]
-            scan_pos -= 1
+my_list = [70, 32, 98, 88, 92, 36, 81, 83, 87, 66]
 
-        my_list[scan_pos + 1] = key_value
+print(my_list)
 
-my_list = [12, 57, 14, 33, 72, 79, 26, 56, 42, 40]
-insertion_sort(my_list)
+temp = my_list[0]
+my_list[1] = my_list[0]
+my_list[0] = temp
+
 print(my_list)
