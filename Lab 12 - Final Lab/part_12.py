@@ -17,6 +17,16 @@ class Item:
         self.description = description
 
 
+class Player:
+    pass
+    # def pickup(self, room, item):
+    #     room.items.remove(item)
+    #     self.inventory.append(item)
+
+    def examine(self, room):
+        pass
+
+
 def main():
     room_list = []
     item_list = []
@@ -24,7 +34,8 @@ def main():
     # Bedroom (Room 0)
     room = Room(
                 "You are in a bedroom. It is dark and dusty. \nAll the windows are boarded shut. "
-                "You don't know how you got here... You see a journal on the bed. "
+                "You don't know how you got here... "
+                "\nLooking around the room you see a bed, a dresser, and a bookshelf. "
                 "\nThere are doors to the east and west.",
                 None,
                 None,
@@ -100,7 +111,8 @@ def main():
 
     # Closet (Room 8)
     room = Room(
-            "You are in a dark closet. Feeling around, you find a shoe box, a key, a flash light, and a notepad.",
+            "You are in a dark closet. Feeling around, you find a shoe box, a key, a flash light, and a notepad. "
+            "The exit is to the east.",
             None,
             None,
             0,
@@ -112,6 +124,14 @@ def main():
     # Journal (Bedroom 0)
     journal = Item(0, "journal", "An old leather bound journal. There is a page sticking out...")
     item_list.append(journal)
+
+    # Key (Closet 8)
+    key = Item(8, "key", "A little silver key.")
+    item_list.append(key)
+
+    # Flashlight (Closet 8)
+    flashlight = Item(8, "flashlight", "A powerful flashlight. This might be useful in a dark room...")
+    item_list.append(flashlight)
 
     done = False
     while not done:
@@ -164,13 +184,28 @@ def main():
             else:
                 current_room = next_room
 
+        # Bedroom Bed
+        elif action.lower() == "go to bed" or action.lower() == "bed":
+            print()
+            print("The bed doesn't look like it's been slept in in years. There is a journal on the pillow.")
+
+        # Bedroom Dresser
+        elif action.lower() == "go to dresser" or action.lower() == "dresser":
+            print()
+            print("The dresser is very dusty. All the drawers are empty.")
+
+        # Bedroom Bookshelf
+        elif action.lower() == "go to bookshelf" or action.lower() == "bookshelf":
+            print()
+            print("This doesn't seem like the time for free-reading...")
+
         # Using journal
         elif action.lower() == "read journal" or action.lower() == "read page":
             print()
             print("\"... this house always gave me the creeps. I knew something was off about it. "
                     "\n It feels like this house is alive... I don't even remember anymore how I got here. "
                     "\n I miss my family... At least I think I have a family. I don't remember anymore."
-                    "\n I think I am going to try and escape. Wish me luck journal...\"")
+                    "\n I think I am going to try and escape. Wish me luck, journal...\"")
 
         # Using shoe box
         elif action.lower() == "open shoe box" or action.lower() == "shoe box":
@@ -191,7 +226,7 @@ def main():
         # Unknown input
         else:
             print()
-            print("I don't understand.")
+            print("That is an invalid command.")
 
 
 main()
