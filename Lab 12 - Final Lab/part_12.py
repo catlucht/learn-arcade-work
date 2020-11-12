@@ -84,7 +84,7 @@ def main():
     # Living room (Room 4)
     room = Room(
             "You are in a living room. The television only tunes to static. The phone wire has been cut... "
-            "\nAbove the landline you can make out the number 406-7568-9031."
+            "\nAbove the landline you can make out the number 406-758-9031."
             "\nThere are doors to the north and south.",
             1,
             5,
@@ -96,7 +96,7 @@ def main():
 
     # Kitchen (Room 5)
     room = Room(
-            "You are in a kitchen. \nThere is a door to the north.",
+            "You are in a kitchen. There is a door to the north.",
             4,
             None,
             None,
@@ -107,7 +107,7 @@ def main():
 
     # Hidden Room (Room 6)
     room = Room(
-            "You are in a hidden room. There is a door to the North.",
+            "You are in a hidden room. There is a door to the north.",
             2,
             None,
             None,
