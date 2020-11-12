@@ -2,12 +2,14 @@ class Room:
     """
     This is the class for the room
     """
-    def __init__(self, description, north, south, east, west):
+    def __init__(self, description, north, south, east, west, up, down):
         self.description = description
         self.north = north
         self.south = south
         self.east = east
         self.west = west
+        self.up = up
+        self.down = down
 
 
 class Item:
@@ -35,109 +37,123 @@ def main():
     room = Room(
                 "You are in a bedroom. It is dark and dusty. \nAll the windows are boarded shut. "
                 "You don't know how you got here... "
-                "\nLooking around the room you see a bed, a dresser, and a bookshelf. "
                 "\nThere are doors to the east and west.",
                 None,
                 None,
                 1,
-                8)
+                7,
+                None,
+                None)
     room_list.append(room)
 
     # Hall (Room 1)
     room = Room(
                 "You are in a hallway. There are portraits hanging on the walls. "
-                "\nThe eyes seem to follow you as you move. Doors surround you in all directions.",
+                "\nThe eyes seem to follow you as you move. Doors surround you to the north, south, and west."
+                "\nYou can also go down the stairs.",
+                3,
                 4,
-                5,
-                2,
-                0)
+                None,
+                0,
+                None,
+                2)
     room_list.append(room)
 
-    # Stairs (Room 2)
+    # Basement (Room 2)
     room = Room(
-            "You are in a stairwell. Every other step is missing... \nThere are doors to the east and west.",
+            "You are in a dark basement. The only exit you see is up the stairs.",
+            None,
+            6,
             None,
             None,
-            3,
-            1)
+            1,
+            None)
     room_list.append(room)
 
-    # Basement (Room 3)
-    room = Room(
-            "You are in a dark basement. There is a door to the west.",
-            None,
-            7,
-            None,
-            2)
-    room_list.append(room)
-
-    # Garden (Room 4)
+    # Garden (Room 3)
     room = Room(
             "You are in a garden of dead and rotted plants. \nThere is a door to the south.",
             None,
             1,
             None,
+            None,
+            None,
             None)
     room_list.append(room)
 
-    # Living room (Room 5)
+    # Living room (Room 4)
     room = Room(
             "You are in a living room. The television only tunes to static. The phone wire has been cut... "
             "\nThere are doors to the north and south.",
             1,
-            6,
-            None,
-            None)
-    room_list.append(room)
-
-    # Kitchen (Room 6)
-    room = Room(
-            "You are in a kitchen. You already checked, all the food is expired and moldy. "
-            "\nThere is a door to the north.",
             5,
             None,
             None,
+            None,
             None)
     room_list.append(room)
 
-    # Hidden Room (Room 7)
+    # Kitchen (Room 5)
+    room = Room(
+            "You are in a kitchen. \nThere is a door to the north.",
+            4,
+            None,
+            None,
+            None,
+            None,
+            None)
+    room_list.append(room)
+
+    # Hidden Room (Room 6)
     room = Room(
             "You are in a hidden room.",
-            3,
+            2,
+            None,
+            None,
             None,
             None,
             None)
     room_list.append(room)
 
-    # Closet (Room 8)
+    # Closet (Room 7)
     room = Room(
-            "You are in a dark closet. Feeling around, you find a shoe box, a key, a flash light, and a notepad. "
-            "The exit is to the east.",
+            "You are in a dark closet. There is a door to the east.",
             None,
             None,
             0,
+            None,
+            None,
             None)
     room_list.append(room)
 
     current_room = 0
 
     # Journal (Bedroom 0)
-    journal = Item(0, "journal", "An old leather bound journal. There is a page sticking out...")
+    journal = Item(0, "journal", "There is an old leather bound journal. There is a page sticking out...")
     item_list.append(journal)
 
-    # Key (Closet 8)
-    key = Item(8, "key", "A little silver key.")
+    # Key (Closet 7)
+    key = Item(7, "key", "You see a little silver key.")
     item_list.append(key)
 
-    # Flashlight (Closet 8)
-    flashlight = Item(8, "flashlight", "A powerful flashlight. This might be useful in a dark room...")
+    # Flashlight (Closet 7)
+    flashlight = Item(7, "flashlight", "There is a powerful flashlight. That might be useful later...")
     item_list.append(flashlight)
+
+    # Sheers (Garden 3)
+    sheers = Item(3, "sheers", "There is a pair of sheers.")
+    item_list.append(sheers)
+
+    #
 
     done = False
     while not done:
         print()
 
         print(room_list[current_room].description)
+        for item in item_list:
+            if item.room == current_room:
+                print(item.description)
         action = input("What is your command? ")
 
         # Moving north
@@ -184,20 +200,7 @@ def main():
             else:
                 current_room = next_room
 
-        # Bedroom Bed
-        elif action.lower() == "go to bed" or action.lower() == "bed":
-            print()
-            print("The bed doesn't look like it's been slept in in years. There is a journal on the pillow.")
-
-        # Bedroom Dresser
-        elif action.lower() == "go to dresser" or action.lower() == "dresser":
-            print()
-            print("The dresser is very dusty. All the drawers are empty.")
-
-        # Bedroom Bookshelf
-        elif action.lower() == "go to bookshelf" or action.lower() == "bookshelf":
-            print()
-            print("This doesn't seem like the time for free-reading...")
+        
 
         # Using journal
         elif action.lower() == "read journal" or action.lower() == "read page":
