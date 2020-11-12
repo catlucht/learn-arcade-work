@@ -84,6 +84,7 @@ def main():
     # Living room (Room 4)
     room = Room(
             "You are in a living room. The television only tunes to static. The phone wire has been cut... "
+            "\nAbove the landline you can make out the number 406-7568-9031."
             "\nThere are doors to the north and south.",
             1,
             5,
@@ -106,7 +107,7 @@ def main():
 
     # Hidden Room (Room 6)
     room = Room(
-            "You are in a hidden room.",
+            "You are in a hidden room. There is a door to the North.",
             2,
             None,
             None,
@@ -140,11 +141,21 @@ def main():
     flashlight = Item(7, "flashlight", "There is a powerful flashlight. That might be useful later...")
     item_list.append(flashlight)
 
+    # Notepad (Closet 7)
+    notepad = Item(7, "notepad", "You see a notepad. There is some writing on it.")
+    item_list.append(notepad)
+
     # Sheers (Garden 3)
     sheers = Item(3, "sheers", "There is a pair of sheers.")
     item_list.append(sheers)
 
-    #
+    # Bone (Kitchen 5)
+    bone = Item(5, "bone", "There is a large bone on the table. Gross...")
+    item_list.append(bone)
+
+    # Door knob (Hidden room 6)
+    door_knob = Item(6, "door knob", "You spot a shiny brass door knob. Have you seen a door without a knob?...")
+    item_list.append(door_knob)
 
     done = False
     while not done:
@@ -154,7 +165,7 @@ def main():
         for item in item_list:
             if item.room == current_room:
                 print(item.description)
-        action = input("What is your command? ")
+        action = input("Which direction would you like to go? ")
 
         # Moving north
         if action.lower() == "go north" or action.lower() == "north" or action.lower() == "move north":
@@ -200,25 +211,45 @@ def main():
             else:
                 current_room = next_room
 
-        
+        # Moving up
+        elif action.lower() == "up" or action.lower() == "upstairs":
+            next_room = room_list[current_room].up
 
-        # Using journal
-        elif action.lower() == "read journal" or action.lower() == "read page":
-            print()
-            print("\"... this house always gave me the creeps. I knew something was off about it. "
-                    "\n It feels like this house is alive... I don't even remember anymore how I got here. "
-                    "\n I miss my family... At least I think I have a family. I don't remember anymore."
-                    "\n I think I am going to try and escape. Wish me luck, journal...\"")
+            if next_room is None:
+                print()
+                print("Walking that way isn't helpful.")
 
-        # Using shoe box
-        elif action.lower() == "open shoe box" or action.lower() == "shoe box":
-            print()
-            print("Inside the shoe box you find a note.")
+            else:
+                current_room = next_room
 
-        elif action.lower() == "read note" or action.lower() == "note":
-            print()
-            print("\"A1 B2 C3 D4 E5 F6 G7 H8 I9 J10 K11 L12 M13 N14 O15"
-                    "\nP16 Q17 R18 S19 T20 U21 V22 W23 X24 Y25 Z26\"")
+        # Moving down
+        elif action.lower() == "down" or action.lower() == "downstairs":
+            next_room = room_list[current_room].down
+
+            if next_room is None:
+                print()
+                print("There is no where to go that way.")
+
+            else:
+                current_room = next_room
+
+        # # Using journal
+        # elif action.lower() == "read journal" or action.lower() == "read page":
+        #     print()
+        #     print("\"... this house always gave me the creeps. I knew something was off about it. "
+        #             "\n It feels like this house is alive... I don't even remember anymore how I got here. "
+        #             "\n I miss my family... At least I think I have a family. I don't remember anymore."
+        #             "\n I think I am going to try and escape. Wish me luck, journal...\"")
+        #
+        # # Using shoe box
+        # elif action.lower() == "open shoe box" or action.lower() == "shoe box":
+        #     print()
+        #     print("Inside the shoe box you find a note.")
+        #
+        # elif action.lower() == "read note" or action.lower() == "note":
+        #     print()
+        #     print("\"A1 B2 C3 D4 E5 F6 G7 H8 I9 J10 K11 L12 M13 N14 O15"
+        #             "\nP16 Q17 R18 S19 T20 U21 V22 W23 X24 Y25 Z26\"")
 
         # Quit action
         elif action.lower() == "q" or action.lower() == "quit":
