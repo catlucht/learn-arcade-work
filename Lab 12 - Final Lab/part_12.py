@@ -35,9 +35,9 @@ def main():
 
     # Bedroom (Room 0)
     room = Room(
-                "You are in a bedroom. It is dark and dusty. \nAll the windows are boarded shut. "
-                "You don't know how you got here... "
-                "\nThere are doors to the east and west.",
+                "You are in a bedroom. It is dark and dusty.\nAll the windows are boarded shut. "
+                "You don't know how you got here...\n"
+                "There are doors to the east and west.",
                 None,
                 None,
                 1,
@@ -161,14 +161,22 @@ def main():
     while not done:
         print()
 
+        # Print room description
         print(room_list[current_room].description)
+
+        # print items in current room
         for item in item_list:
             if item.room == current_room:
                 print(item.description)
-        action = input("Which direction would you like to go? ")
+
+        # User action input
+        action = input("What would you like to do? ")
+        command_words = action.split(" ")
 
         # Moving north
-        if action.lower() == "go north" or action.lower() == "north" or action.lower() == "move north":
+        if action.lower() == "n" or action.lower() == "north" or action.lower() == "move north" \
+                or action.lower() == "go north" or action.lower() == "walk north":
+
             next_room = room_list[current_room].north
 
             if next_room is None:
@@ -179,7 +187,8 @@ def main():
                 current_room = next_room
 
         # Moving south
-        elif action.lower() == "go south" or action.lower() == "south" or action.lower() == "move south":
+        elif action.lower() == "s" or action.lower() == "south" or action.lower() == "move south" \
+                or action.lower() == "go south" or action.lower() == "walk south":
             next_room = room_list[current_room].south
 
             if next_room is None:
@@ -190,7 +199,9 @@ def main():
                 current_room = next_room
 
         # Moving west
-        elif action.lower() == "go west" or action.lower() == "west" or action.lower() == "move west":
+        elif action.lower() == "w" or action.lower() == "west" or action.lower() == "move west" \
+                or action.lower() == "go west" or action.lower() == "walk west":
+
             next_room = room_list[current_room].west
 
             if next_room is None:
@@ -201,7 +212,9 @@ def main():
                 current_room = next_room
 
         # Moving east
-        elif action.lower() == "go east" or action.lower() == "east" or action.lower() == "move east":
+        elif action.lower() == "e" or action.lower() == "east" or action.lower() == "move east" \
+                or action.lower() == "go east" or action.lower() == "walk east":
+
             next_room = room_list[current_room].east
 
             if next_room is None:
@@ -256,6 +269,31 @@ def main():
             print()
             print("Goodbye.")
             done = True
+
+        elif command_words[0].lower() == "get":
+            picked_up = False
+            for item in item_list:
+                if command_words[1].lower() == item.name and item.room == current_room:
+                    item.room = -1
+                    print()
+                    print("You have picked up", item.name)
+                    picked_up = True
+            if not picked_up:
+                print()
+                print("That item doesn't seem to be here")
+
+        elif command_words[0].lower() == "drop":
+            dropped = False
+            for item in item_list:
+                if command_words[1].lower() == item.name and item.room == -1:
+                    item.room = current_room
+                    print()
+                    print("You dropped", item.name)
+                    dropped = True
+            if not dropped:
+                print()
+                print("You don't have that item.")
+
 
         # Unknown input
         else:

@@ -109,9 +109,14 @@ import random
 def selection_sort(my_list):
     """ Sort a list using the selection sort """
 
-    s_total = 0
+    in_total = 0
+    out_total = 0
+
     # Loop through the entire array
     for cur_pos in range(len(my_list)):
+
+        out_total += 1
+
         # Find the position that has the smallest number
         # Start with the current position
         min_pos = cur_pos
@@ -119,29 +124,34 @@ def selection_sort(my_list):
         # Scan left to right (end of the list)
         for scan_pos in range(cur_pos + 1, len(my_list)):
 
+            in_total += 1
+
             # Is this position smallest?
             if my_list[scan_pos] < my_list[min_pos]:
                 # It is, mark this position as the smallest
                 min_pos = scan_pos
-
-                s_total += 1
 
         # Swap the two values
         temp = my_list[min_pos]
         my_list[min_pos] = my_list[cur_pos]
         my_list[cur_pos] = temp
 
-    print("Loop total =", s_total)
+    print("Outside loop total =", out_total)
+    print("Inside loop total =", in_total)
 
 
 def insertion_sort(my_list):
     """ Sort a list using the insertion sort """
 
-    i_total = 0
+    out_total = 0
+    in_total = 0
+
     # Start at the second element (pos 1).
     # Use this element to insert into the
     # list.
     for key_pos in range(1, len(my_list)):
+
+        out_total += 1
 
         # Get the value of the element to insert
         key_value = my_list[key_pos]
@@ -155,13 +165,14 @@ def insertion_sort(my_list):
             my_list[scan_pos + 1] = my_list[scan_pos]
             scan_pos = scan_pos - 1
 
-            i_total += 1
+            in_total += 1
 
         # Everything's been moved out of the way, insert
         # the key into the correct location
         my_list[scan_pos + 1] = key_value
 
-    print("Loop total =", i_total)
+    print("Outside loop total =", out_total)
+    print("Inside loop total =", in_total)
 
 
 # This will point out a list
@@ -202,13 +213,15 @@ main()
 
 
 Original List
- 94 98 78 58 63 73 78 32 45 21 37 49 28 10 42  6 14 13 97 16 76 35 49 89 79 20  9 23 80 39 81  9 92 63 29 50 67 84 34 84 13 52 43 22 50  2 82 39 29 72 27 11  3 73  8 82 34 34 35 93 30 32 44 60 45 84 98 39 89 93 28 47 65 93 31 56 85 15 80 65 45  9 56 67 77 21 80 19 65 52 84 51  1  3 38 92 16 93 90 32
+ 63 70 26 68 15 85 50 67 13 95 56 23  4 19 13  1 63 65 31  4 76  6 82 34 87 35 33 25 74 97  3 73 97  6 89  9 87 94  2  5 20 66 30 50 64 46 62  3 66 44 59 57 81 53 73 16 74 16 51 96 42 59 40 61 27 74 69 79 44 15  4  1 87 65 76  6 92 98 86 78 64 68 43  9 78 70 34 59 72 20 30 13 38 28 85 44 52 35 53 63
 Selection Sort
-Loop total = 296
-  1  2  3  3  6  8  9  9  9 10 11 13 13 14 15 16 16 19 20 21 21 22 23 27 28 28 29 29 30 31 32 32 32 34 34 34 35 35 37 38 39 39 39 42 43 44 45 45 45 47 49 49 50 50 51 52 52 56 56 58 60 63 63 65 65 65 67 67 72 73 73 76 77 78 78 79 80 80 80 81 82 82 84 84 84 84 85 89 89 90 92 92 93 93 93 93 94 97 98 98
+Outside loop total = 100
+Inside loop total = 4950
+  1  1  2  3  3  4  4  4  5  6  6  6  9  9 13 13 13 15 15 16 16 19 20 20 23 25 26 27 28 30 30 31 33 34 34 35 35 38 40 42 43 44 44 44 46 50 50 51 52 53 53 56 57 59 59 59 61 62 63 63 63 64 64 65 65 66 66 67 68 68 69 70 70 72 73 73 74 74 74 76 76 78 78 79 81 82 85 85 86 87 87 87 89 92 94 95 96 97 97 98
 Insertion Sort
-Loop total = 2370
-  1  2  3  3  6  8  9  9  9 10 11 13 13 14 15 16 16 19 20 21 21 22 23 27 28 28 29 29 30 31 32 32 32 34 34 34 35 35 37 38 39 39 39 42 43 44 45 45 45 47 49 49 50 50 51 52 52 56 56 58 60 63 63 65 65 65 67 67 72 73 73 76 77 78 78 79 80 80 80 81 82 82 84 84 84 84 85 89 89 90 92 92 93 93 93 93 94 97 98 98
+Outside loop total = 99
+Inside loop total = 2341
+  1  1  2  3  3  4  4  4  5  6  6  6  9  9 13 13 13 15 15 16 16 19 20 20 23 25 26 27 28 30 30 31 33 34 34 35 35 38 40 42 43 44 44 44 46 50 50 51 52 53 53 56 57 59 59 59 61 62 63 63 63 64 64 65 65 66 66 67 68 68 69 70 70 72 73 73 74 74 74 76 76 78 78 79 81 82 85 85 86 87 87 87 89 92 94 95 96 97 97 98
 
 
 
