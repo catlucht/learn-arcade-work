@@ -270,6 +270,13 @@ def main():
             print("Goodbye.")
             done = True
 
+        elif action.lower() == "inventory" or action.lower() == "check inventory":
+            print()
+            print("Inventory:")
+            for item in item_list:
+                if item.room == -1:
+                    print(item.name)
+
         elif command_words[0].lower() == "get":
             picked_up = False
             for item in item_list:
@@ -293,7 +300,6 @@ def main():
             if not dropped:
                 print()
                 print("You don't have that item.")
-
 
         # Unknown input
         else:
