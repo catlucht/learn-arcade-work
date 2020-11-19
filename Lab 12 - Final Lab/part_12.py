@@ -19,16 +19,6 @@ class Item:
         self.description = description
 
 
-class Player:
-    pass
-    # def pickup(self, room, item):
-    #     room.items.remove(item)
-    #     self.inventory.append(item)
-
-    def examine(self, room):
-        pass
-
-
 def main():
     room_list = []
     item_list = []
@@ -36,11 +26,10 @@ def main():
     # Bedroom (Room 0)
     room = Room(
                 "You are in a bedroom. It is dark and dusty.\nAll the windows are boarded shut. "
-                "You don't know how you got here...\n"
-                "There are doors to the east and west.",
+                "There are doors to the east and west. The door to the east seems to be locked...",
                 None,
                 None,
-                1,
+                None,
                 7,
                 None,
                 None)
@@ -72,7 +61,8 @@ def main():
 
     # Garden (Room 3)
     room = Room(
-            "You are in a garden of dead and rotted plants. \nThere is a door to the south.",
+            "You are in a garden of dead and rotted plants. There is a large menacing dog barking at you."
+            "\nHe seems to be guarding something... There is a door to the south.",
             None,
             1,
             None,
@@ -130,8 +120,12 @@ def main():
     current_room = 0
 
     # Journal (Bedroom 0)
-    journal = Item(0, "journal", "There is an old leather bound journal. There is a page sticking out...")
+    journal = Item(0, "journal", "There is an old leather bound journal on the bed. There is a page sticking out...")
     item_list.append(journal)
+
+    # Shoebox (Bedroom 0)
+    shoebox = Item(0, "shoebox", "There is a shoe box peaking out from under the bed.")
+    item_list.append(shoebox)
 
     # Key (Closet 7)
     key = Item(7, "key", "You see a little silver key.")
@@ -145,9 +139,9 @@ def main():
     notepad = Item(7, "notepad", "You see a notepad. There is some writing on it.")
     item_list.append(notepad)
 
-    # Sheers (Garden 3)
-    sheers = Item(3, "sheers", "There is a pair of sheers.")
-    item_list.append(sheers)
+    # Bolt cutters (Garden 3)
+    bolt_cutters = Item(None, "bolt cutters", "There are a pair of bolt cutters next to the dog.")
+    item_list.append(bolt_cutters)
 
     # Bone (Kitchen 5)
     bone = Item(5, "bone", "There is a large bone on the table. Gross...")
@@ -246,30 +240,58 @@ def main():
             else:
                 current_room = next_room
 
-        # # Using journal
-        # elif action.lower() == "read journal" or action.lower() == "read page":
-        #     print()
-        #     print("\"... this house always gave me the creeps. I knew something was off about it. "
-        #             "\n It feels like this house is alive... I don't even remember anymore how I got here. "
-        #             "\n I miss my family... At least I think I have a family. I don't remember anymore."
-        #             "\n I think I am going to try and escape. Wish me luck, journal...\"")
-        #
-        # # Using shoe box
-        # elif action.lower() == "open shoe box" or action.lower() == "shoe box":
-        #     print()
-        #     print("Inside the shoe box you find a note.")
-        #
-        # elif action.lower() == "read note" or action.lower() == "note":
-        #     print()
-        #     print("\"A1 B2 C3 D4 E5 F6 G7 H8 I9 J10 K11 L12 M13 N14 O15"
-        #             "\nP16 Q17 R18 S19 T20 U21 V22 W23 X24 Y25 Z26\"")
+        # Using journal
+        elif command_words[0].lower() == "read":
+            if command_words[1].lower() == "journal" or command_words[1].lower() == "page":
+                print()
+                print("\"... this house always gave me the creeps. I knew something was off about it. "
+                      "\n It feels like this house is alive... I don't even remember anymore how I got here. "
+                      "\n I miss my family... At least I think I have a family. I don't remember anymore."
+                      "\n I think I am going to try and escape. Wish me luck, journal...\"")
 
-        # Quit action
-        elif action.lower() == "q" or action.lower() == "quit":
-            print()
-            print("Goodbye.")
-            done = True
+        # Using shoe box
+        elif command_words[0] == "open":
+            if command_words[1] == "shoebox":
+                print()
+                print("Inside the shoe box you find a note:"
+                      "\nA1 B2 C3 D4 E5 F6 G7 H8 I9 J10 K11 L12 M13 N14 O15 "
+                      "\nP16 Q17 R18 S19 T20 U21 V22 W23 X24 Y25 Z26")
 
+        # Read notepad
+        elif command_words[0].lower() == "read":
+            if command_words[1].lower() == "notepad":
+                print()
+                print("The only way out is to 'escape'")
+
+        # Bedroom door passcode
+        elif command_words[0].lower() == "enter":
+            if command_words[1] == "51931165":
+                print()
+                print("The door unlocked.")
+                room_list[0].east = 1
+                room_list[0].description = "You are in a bedroom. It is dark and dusty." \
+                                           "\nAll the windows are boarded shut." \
+                                           "\nThere are doors to the east and west."
+            else:
+                print("The door is still locked. That was the wrong code...")
+
+        # Pet dog
+        elif command_words[0].lower() == "pet":
+            if command_words[1].lower() == "dog":
+                print()
+                print("That's a bad idea.")
+
+        # Using bone
+        elif command_words[0].lower() == "give":
+            if command_words[1].lower() == "bone":
+                print()
+                print("The dog gladly took the bone, wagging his tail."
+                      "\nHe seems very happy now.")
+                room_list[3].description = "You are in a garden of dead and rotted plants. There is a docile dog biting on a bone. " \
+                                           "\nThere is a door to the south."
+                item_list[5].room = 3
+
+        # Check Inventory
         elif action.lower() == "inventory" or action.lower() == "check inventory":
             print()
             print("Inventory:")
@@ -277,6 +299,7 @@ def main():
                 if item.room == -1:
                     print(item.name)
 
+        # Pick up items
         elif command_words[0].lower() == "get":
             picked_up = False
             for item in item_list:
@@ -289,6 +312,7 @@ def main():
                 print()
                 print("That item doesn't seem to be here")
 
+        # Drop items
         elif command_words[0].lower() == "drop":
             dropped = False
             for item in item_list:
@@ -300,6 +324,12 @@ def main():
             if not dropped:
                 print()
                 print("You don't have that item.")
+
+        # Quit action
+        elif action.lower() == "q" or action.lower() == "quit":
+            print()
+            print("Goodbye.")
+            done = True
 
         # Unknown input
         else:
