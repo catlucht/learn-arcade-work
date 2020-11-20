@@ -39,13 +39,13 @@ def main():
     room = Room(
                 "You are in a hallway. There are portraits hanging on the walls. "
                 "\nThe eyes seem to follow you as you move. Doors surround you to the north, south, and west."
-                "\nYou can also go down the stairs.",
+                "\nThere is a lock on a door to go down to the basement.",
                 3,
                 4,
                 None,
                 0,
                 None,
-                2)
+                None)
     room_list.append(room)
 
     # Basement (Room 2)
@@ -75,7 +75,8 @@ def main():
     room = Room(
             "You are in a living room. The television only tunes to static. The phone wire has been cut... "
             "\nAbove the landline you can make out the number 406-758-9031."
-            "\nThere are doors to the north and south.",
+            "\nThere are doors to the north and south. The house's front door seems to be to the west."
+            "\nIt's chained shut and missing the door knob... Maybe there's a different way out.",
             1,
             5,
             None,
@@ -117,41 +118,57 @@ def main():
             None)
     room_list.append(room)
 
+    # Outside (Room 10)
+    room = Room(
+            "A strong breeze overwhelms you as you open the front door. The sun so bright, you have to squint to see"
+            "\nBut you see it... freedom. You think of your parents, they have to be searching for you."
+            "\nYou wonder what your friends have been up to since you've been gone. You miss them."
+            "\nBut you have it, finally... freedom... sweet freedom...",
+            None,
+            None,
+            None,
+            None,
+            None,
+            None)
+
     current_room = 0
 
-    # Journal (Bedroom 0)
+    # 0 Journal (Bedroom 0)
     journal = Item(0, "journal", "There is an old leather bound journal on the bed. There is a page sticking out...")
     item_list.append(journal)
 
-    # Shoebox (Bedroom 0)
-    shoebox = Item(0, "shoebox", "There is a shoe box peaking out from under the bed.")
+    # 1 Shoebox (Bedroom 0)
+    shoebox = Item(0, "shoebox", "There is a shoebox peaking out from under the bed.")
     item_list.append(shoebox)
 
-    # Key (Closet 7)
+    # 2 Key (Closet 7)
     key = Item(7, "key", "You see a little silver key.")
     item_list.append(key)
 
-    # Flashlight (Closet 7)
+    # 3 Flashlight (Closet 7)
     flashlight = Item(7, "flashlight", "There is a powerful flashlight. That might be useful later...")
     item_list.append(flashlight)
 
-    # Notepad (Closet 7)
+    # 4 Notepad (Closet 7)
     notepad = Item(7, "notepad", "You see a notepad. There is some writing on it.")
     item_list.append(notepad)
 
-    # Bolt cutters (Garden 3)
+    # 5 Bolt cutters (Garden 3)
     bolt_cutters = Item(None, "bolt cutters", "There are a pair of bolt cutters next to the dog.")
     item_list.append(bolt_cutters)
 
-    # Bone (Kitchen 5)
+    # 6 Bone (Kitchen 5)
     bone = Item(5, "bone", "There is a large bone on the table. Gross...")
     item_list.append(bone)
 
-    # Door knob (Hidden room 6)
+    # 7 Door knob (Hidden room 6)
     door_knob = Item(6, "door knob", "You spot a shiny brass door knob. Have you seen a door without a knob?...")
     item_list.append(door_knob)
 
     done = False
+    found_door_knob = False
+    used_bolt_cutters = False
+
     while not done:
         print()
 
@@ -242,26 +259,43 @@ def main():
 
         # Using journal
         elif command_words[0].lower() == "read":
-            if command_words[1].lower() == "journal" or command_words[1].lower() == "page":
+            if len(command_words) > 1:
+                if item_list[0].room == -1:
+                    if command_words[1].lower() == "journal" or command_words[1].lower() == "page":
+                        print()
+                        print("\"... this house always gave me the creeps. I knew something was off about it. "
+                              "\n It feels like this house is alive... I don't even remember anymore how I got here. "
+                              "\n I miss my family... At least I think I have a family. I don't remember anymore."
+                              "\n I think I am going to try and escape. Wish me luck, journal...\"")
+                if item_list[4].room == -1:
+                    if command_words[1].lower() == "notepad":
+                        print()
+                        print("The only way out is to 'escape'")
+                else:
+                    print()
+                    print("You can't read that.")
+            else:
                 print()
-                print("\"... this house always gave me the creeps. I knew something was off about it. "
-                      "\n It feels like this house is alive... I don't even remember anymore how I got here. "
-                      "\n I miss my family... At least I think I have a family. I don't remember anymore."
-                      "\n I think I am going to try and escape. Wish me luck, journal...\"")
+                print("Yes, we should all read.")
 
         # Using shoe box
         elif command_words[0] == "open":
-            if command_words[1] == "shoebox":
+            if len(command_words) > 1:
+                if command_words[1] == "shoebox":
+                    if item_list[1].room == -1:
+                        print()
+                        print("Inside the shoe box you find a note:"
+                              "\nA1 B2 C3 D4 E5 F6 G7 H8 I9 J10 K11 L12 M13 N14 O15 "
+                              "\nP16 Q17 R18 S19 T20 U21 V22 W23 X24 Y25 Z26")
+                    else:
+                        print()
+                        print("You don't have that item.")
+                else:
+                    print()
+                    print("That can't be opened.")
+            else:
                 print()
-                print("Inside the shoe box you find a note:"
-                      "\nA1 B2 C3 D4 E5 F6 G7 H8 I9 J10 K11 L12 M13 N14 O15 "
-                      "\nP16 Q17 R18 S19 T20 U21 V22 W23 X24 Y25 Z26")
-
-        # Read notepad
-        elif command_words[0].lower() == "read":
-            if command_words[1].lower() == "notepad":
-                print()
-                print("The only way out is to 'escape'")
+                print("What would you like to open?")
 
         # Bedroom door passcode
         elif command_words[0].lower() == "enter":
@@ -273,7 +307,33 @@ def main():
                                            "\nAll the windows are boarded shut." \
                                            "\nThere are doors to the east and west."
             else:
+                print()
                 print("The door is still locked. That was the wrong code...")
+
+        # Basement lock
+        elif command_words[0].lower() == "use":
+            if command_words[1] == "key":
+                if item_list[2] == -1:
+                    print()
+                    print("The door is unlocked.")
+                    room_list[1].down = 2
+
+                else:
+                    print()
+                    print("You don't have the key for this door.")
+
+        # Use door knob
+        elif command_words[0].lower() == "use":
+            if command_words[1].lower() == "door knob":
+                print()
+                print("The door knob is now in place")
+                item_list[7].room = None
+                found_door_knob = True
+
+                if found_door_knob and used_bolt_cutters:
+                    print()
+
+                    room_list[4].west = 10
 
         # Pet dog
         elif command_words[0].lower() == "pet":
@@ -335,6 +395,10 @@ def main():
         else:
             print()
             print("That is an invalid command.")
+
+        # End of game
+        if current_room == 10:
+            done = True
 
 
 main()
