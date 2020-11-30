@@ -87,7 +87,8 @@ def main():
 
     # Kitchen (Room 5)
     room = Room(
-            "You are in a kitchen. There is a door to the north.",
+            "You are in a kitchen. All the food is old and rotted. You better find a way out quick..."
+            "\nThere is a door to the north.",
             4,
             None,
             None,
@@ -98,7 +99,8 @@ def main():
 
     # Hidden Room (Room 6)
     room = Room(
-            "You are in a hidden room. There is a door to the north.",
+            "You are in a hidden room. You wonder what the use of such a creepy room could be..."
+            "\nThere is a door to the north.",
             2,
             None,
             None,
@@ -109,7 +111,7 @@ def main():
 
     # Closet (Room 7)
     room = Room(
-            "You are in a dark closet. There is a door to the east.",
+            "You are in a dark closet. It is so dusty you sneeze. There is a door to the east.",
             None,
             None,
             0,
@@ -257,26 +259,34 @@ def main():
             else:
                 current_room = next_room
 
-        # Using journal
+        # Reading journal
         elif command_words[0].lower() == "read":
             if len(command_words) > 1:
-                if item_list[0].room == -1:
-                    if command_words[1].lower() == "journal" or command_words[1].lower() == "page":
+                if command_words[1].lower() == "journal" or command_words[1].lower() == "page":
+                    if item_list[0].room == -1:
                         print()
                         print("\"... this house always gave me the creeps. I knew something was off about it. "
                               "\n It feels like this house is alive... I don't even remember anymore how I got here. "
                               "\n I miss my family... At least I think I have a family. I don't remember anymore."
                               "\n I think I am going to try and escape. Wish me luck, journal...\"")
-                if item_list[4].room == -1:
-                    if command_words[1].lower() == "notepad":
+                    else:
+                        print()
+                        print("You don't have that item.")
+
+                elif command_words[1].lower() == "notepad":
+                    if item_list[4].room == -1:
                         print()
                         print("The only way out is to 'escape'")
+                    else:
+                        print()
+                        print("You don't have that item.")
+
                 else:
                     print()
                     print("You can't read that.")
             else:
                 print()
-                print("Yes, we should all read.")
+                print("Yes, reading is good. What would you like to read?")
 
         # Using shoe box
         elif command_words[0] == "open":
@@ -299,41 +309,68 @@ def main():
 
         # Bedroom door passcode
         elif command_words[0].lower() == "enter":
-            if command_words[1] == "51931165":
-                print()
-                print("The door unlocked.")
-                room_list[0].east = 1
-                room_list[0].description = "You are in a bedroom. It is dark and dusty." \
-                                           "\nAll the windows are boarded shut." \
-                                           "\nThere are doors to the east and west."
-            else:
-                print()
-                print("The door is still locked. That was the wrong code...")
-
-        # Basement lock
-        elif command_words[0].lower() == "use":
-            if command_words[1] == "key":
-                if item_list[2] == -1:
+            if len(command_words) > 1:
+                if command_words[1] == "51931165":
                     print()
-                    print("The door is unlocked.")
-                    room_list[1].down = 2
+                    print("The door unlocked.")
+                    room_list[0].east = 1
+                    room_list[0].description = "You are in a bedroom. It is dark and dusty." \
+                                               "\nAll the windows are boarded shut." \
+                                               "\nThere are doors to the east and west."
+                else:
+                    print()
+                    print("The door is still locked. That was the wrong code...")
+
+        # --- Use command ---
+        elif command_words[0].lower() == "use":
+            # Basement lock
+            if len(command_words) > 1:
+                if command_words[1] == "key":
+                    if item_list[2].room == -1:
+                        print()
+                        print("The door is unlocked.")
+                        room_list[1].down = 2
+
+                    else:
+                        print()
+                        print("You don't have the key for this door.")
+
+                # Place door knob
+                elif command_words[1].lower() == "door":
+                    if command_words[2].lower() == "knob":
+                        if item_list[7].room == -1:
+                            print()
+                            print("The door knob is now in place")
+                            item_list[7].room = None
+                            found_door_knob = True
+
+                            if found_door_knob and used_bolt_cutters:
+                                print()
+                                print("It seems the door can be opened now...")
+
+                                room_list[4].west = 10
+
+                elif command_words[1].lower() == "bolt":
+                    if command_words[2].lower() == "cutters":
+                        if item_list[5].room == -1:
+                            print()
+                            print("You cut the chain off of the door.")
+                            item_list[5].room = None
+                            used_bolt_cutters = True
+
+                            if found_door_knob and used_bolt_cutters:
+                                print()
+                                print("It seems the door can be opened now...")
+
+                                room_list[4].west = 10
 
                 else:
                     print()
-                    print("You don't have the key for this door.")
+                    print("That can't be used.")
 
-        # Use door knob
-        elif command_words[0].lower() == "use":
-            if command_words[1].lower() == "door knob":
+            else:
                 print()
-                print("The door knob is now in place")
-                item_list[7].room = None
-                found_door_knob = True
-
-                if found_door_knob and used_bolt_cutters:
-                    print()
-
-                    room_list[4].west = 10
+                print("What would you like to use?")
 
         # Pet dog
         elif command_words[0].lower() == "pet":
@@ -341,14 +378,14 @@ def main():
                 print()
                 print("That's a bad idea.")
 
-        # Using bone
+        # Giving dog bone
         elif command_words[0].lower() == "give":
             if command_words[1].lower() == "bone":
                 print()
                 print("The dog gladly took the bone, wagging his tail."
                       "\nHe seems very happy now.")
-                room_list[3].description = "You are in a garden of dead and rotted plants. There is a docile dog biting on a bone. " \
-                                           "\nThere is a door to the south."
+                room_list[3].description = "You are in a garden of dead and rotted plants. " \
+                                           "\nThere is a docile dog gnawing on a bone. There is a door to the south."
                 item_list[5].room = 3
 
         # Check Inventory
