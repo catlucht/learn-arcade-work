@@ -38,9 +38,12 @@ def main():
     # Hall (Room 1)
     room = Room(
                 "You are in a hallway. There are portraits hanging on the walls. "
-                "\nThe eyes seem to follow you as you move. Doors surround you to the north, south, and west."
-                "\nThere is a lock on a door to go down to the basement.",
-                3,
+                "\nThe eyes seem to follow you as you move. "
+                "\nDoors surround you to the north, south, and west. "
+                "\nThe door to the north is automated sliding doors. "
+                "The screen says \"Enter the correct US state to pass.\" "
+                "\nThere is a key lock on a door to go down to the basement.",
+                None,
                 4,
                 None,
                 0,
@@ -50,7 +53,8 @@ def main():
 
     # Basement (Room 2)
     room = Room(
-            "You are in a dark basement. The only exit you see is up the stairs.",
+            "You are in a dark basement. It is too dark to make anything out."
+            "\nIt smells musty down here. The only exit you see is up the stairs.",
             None,
             6,
             None,
@@ -76,7 +80,7 @@ def main():
             "You are in a living room. The television only tunes to static. The phone wire has been cut... "
             "\nAbove the landline you can make out the number 406-758-9031."
             "\nThere are doors to the north and south. The house's front door seems to be to the west."
-            "\nIt's chained shut and missing the door knob... Maybe there's a different way out.",
+            "\nIt's chained shut and missing the doorknob... Maybe there's a different way out.",
             1,
             5,
             None,
@@ -122,10 +126,7 @@ def main():
 
     # Outside (Room 10)
     room = Room(
-            "A strong breeze overwhelms you as you open the front door. The sun so bright, you have to squint to see"
-            "\nBut you see it... freedom. You think of your parents, they have to be searching for you."
-            "\nYou wonder what your friends have been up to since you've been gone. You miss them."
-            "\nBut you have it, finally... freedom... sweet freedom...",
+            "",
             None,
             None,
             None,
@@ -156,7 +157,7 @@ def main():
     item_list.append(notepad)
 
     # 5 Bolt cutters (Garden 3)
-    bolt_cutters = Item(None, "bolt cutters", "There are a pair of bolt cutters next to the dog.")
+    bolt_cutters = Item(None, "cutters", "There are a pair of bolt cutters next to the dog.")
     item_list.append(bolt_cutters)
 
     # 6 Bone (Kitchen 5)
@@ -164,12 +165,14 @@ def main():
     item_list.append(bone)
 
     # 7 Door knob (Hidden room 6)
-    door_knob = Item(6, "door knob", "You spot a shiny brass door knob. Have you seen a door without a knob?...")
-    item_list.append(door_knob)
+    doorknob = Item(6, "doorknob", "You spot a shiny brass doorknob. Have you seen a door without a knob?...")
+    item_list.append(doorknob)
 
     done = False
     found_door_knob = False
     used_bolt_cutters = False
+    basement_unlocked = False
+    garden_unlocked = False
 
     while not done:
         print()
@@ -307,19 +310,45 @@ def main():
                 print()
                 print("What would you like to open?")
 
-        # Bedroom door passcode
+        # --- Passcode locks ---
         elif command_words[0].lower() == "enter":
             if len(command_words) > 1:
-                if command_words[1] == "51931165":
-                    print()
-                    print("The door unlocked.")
-                    room_list[0].east = 1
-                    room_list[0].description = "You are in a bedroom. It is dark and dusty." \
-                                               "\nAll the windows are boarded shut." \
-                                               "\nThere are doors to the east and west."
+                # Bedroom lock
+                if current_room == 0:
+                    if command_words[1] == "51931165":
+                        print()
+                        print("The door unlocked.")
+                        room_list[0].east = 1
+                        room_list[0].description = "You are in a bedroom. It is dark and dusty." \
+                                                   "\nAll the windows are boarded shut." \
+                                                   "\nThere are doors to the east and west."
+                    else:
+                        print()
+                        print("The door is still locked. That was the wrong code...")
+
+                elif current_room == 1:
+                    if command_words[1].lower() == "montana":
+                        print()
+                        print("The door blinked green and unlocked.")
+                        room_list[1].north = 3
+                        garden_unlocked = True
+                        if basement_unlocked:
+                            room_list[1].description = "You are in a hallway. There are portraits hanging on the walls." \
+                                                       "\nThe eyes seem to follow you as you move. " \
+                                                       "\nDoors surround you to the north, south, and west. " \
+                                                       "\nThere is a door to go down to the basement."
+                        else:
+                            room_list[1].description = "You are in a hallway. There are portraits hanging on the walls." \
+                                                       "\nThe eyes seem to follow you as you move. " \
+                                                       "\nDoors surround you to the north, south, and west. " \
+                                                       "\nThere is a lock on the door to go down to the basement."
+                    else:
+                        print()
+                        print("The door is still locked. That was the wrong passcode.")
+
                 else:
                     print()
-                    print("The door is still locked. That was the wrong code...")
+                    print("That does nothing here.")
 
         # --- Use command ---
         elif command_words[0].lower() == "use":
@@ -328,41 +357,89 @@ def main():
                 if command_words[1] == "key":
                     if item_list[2].room == -1:
                         print()
-                        print("The door is unlocked.")
+                        print("The basement door unlocked.")
+                        item_list[2].room = None
                         room_list[1].down = 2
+                        basement_unlocked = True
+                        if garden_unlocked:
+                            room_list[1].description = "You are in a hallway. There are portraits hanging on the walls." \
+                                                       "\nThe eyes seem to follow you as you move. " \
+                                                       "\nDoors surround you to the north, south, and west. " \
+                                                       "\nThere is a door to go down to the basement."
+                        else:
+                            room_list[1].description = "You are in a hallway. There are portraits hanging on the walls. " \
+                                                       "\nThe eyes seem to follow you as you move. " \
+                                                       "\nDoors surround you to the north, south, and west. " \
+                                                       "\nThe door to the north is automated sliding doors. " \
+                                                       "\nThe screen says \"Enter the correct US state to pass.\" " \
+                                                       "\nThere is a door to go down to the basement."
 
                     else:
                         print()
                         print("You don't have the key for this door.")
 
                 # Place door knob
-                elif command_words[1].lower() == "door":
-                    if command_words[2].lower() == "knob":
-                        if item_list[7].room == -1:
+                elif command_words[1].lower() == "doorknob":
+                    if item_list[7].room == -1:
+                        print()
+                        print("The door knob is now in place")
+                        item_list[7].room = None
+                        found_door_knob = True
+                        room_list[4].description = "You are in a living room. The television only tunes to static. The phone wire has been cut... " \
+                                                   "\nAbove the landline you can make out the number 406-758-9031." \
+                                                   "\nThere are doors to the north and south. " \
+                                                   "\nThe house's front door seems to be to the west. It's chained shut..."
+
+                        if found_door_knob and used_bolt_cutters:
                             print()
-                            print("The door knob is now in place")
-                            item_list[7].room = None
-                            found_door_knob = True
+                            print("It seems the door can be opened now...")
 
-                            if found_door_knob and used_bolt_cutters:
-                                print()
-                                print("It seems the door can be opened now...")
+                            room_list[4].west = 10
+                            room_list[4].description = "You are in a living room. The television only tunes to static. The phone wire has been cut... " \
+                                                       "\nAbove the landline you can make out the number 406-758-9031." \
+                                                       "\nThere are doors to the north and south. The house's front door seems to be to the west."
+                    else:
+                        print()
+                        print("You don't have a doorknob.")
 
-                                room_list[4].west = 10
+                elif command_words[1].lower() == "cutters":
+                    if item_list[5].room == -1:
+                        print()
+                        print("You cut the chain off of the door.")
+                        item_list[5].room = None
+                        used_bolt_cutters = True
+                        room_list[4].description = "You are in a living room. The television only tunes to static. The phone wire has been cut... " \
+                                                   "\nAbove the landline you can make out the number 406-758-9031." \
+                                                   "\nThere are doors to the north and south. The house's front door seems to be to the west." \
+                                                   "\nIt is missing the doorknob."
 
-                elif command_words[1].lower() == "bolt":
-                    if command_words[2].lower() == "cutters":
-                        if item_list[5].room == -1:
+                        if found_door_knob and used_bolt_cutters:
                             print()
-                            print("You cut the chain off of the door.")
-                            item_list[5].room = None
-                            used_bolt_cutters = True
+                            print("It seems the door can be opened now...")
 
-                            if found_door_knob and used_bolt_cutters:
-                                print()
-                                print("It seems the door can be opened now...")
+                            room_list[4].west = 10
+                            room_list[4].description = "You are in a living room. The television only tunes to static. The phone wire has been cut... " \
+                                                       "\nAbove the landline you can make out the number 406-758-9031." \
+                                                       "\nThere are doors to the north and south. The house's front door seems to be to the west."
 
-                                room_list[4].west = 10
+                    else:
+                        print()
+                        print("You don't have that item.")
+
+                elif command_words[1].lower() == "flashlight":
+                    if item_list[3].room == -1:
+                        if current_room == 2:
+                            print()
+                            print("You switch on the flashlight. You can now see that there is a door to the south.")
+                            item_list[3].room = None
+                            room_list[2].description = "You are in a dark basement. It smells musty down here." \
+                                                       "\nThere is a door to the south and an exit up the stairs."
+                        else:
+                            print()
+                            print("You switch on the flashlight. It doesn't help anything.")
+                    else:
+                        print()
+                        print("You don't have a flashlight.")
 
                 else:
                     print()
@@ -435,6 +512,13 @@ def main():
 
         # End of game
         if current_room == 10:
+            print()
+            print("A strong breeze overwhelms you as you open the front door. The sun is so bright, you have to squint to see."
+                  "\nBut you see it... freedom. You think of your parents, they have to be searching for you." 
+                  "\nYou wonder what your friends have been up to since you've been gone. You miss them." 
+                  "\nBut you have it, finally... freedom... sweet freedom...")
+            print()
+            print("Thanks for playing! Goodbye.")
             done = True
 
 
