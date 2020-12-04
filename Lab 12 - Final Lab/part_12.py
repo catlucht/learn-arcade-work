@@ -26,7 +26,7 @@ def main():
     # Bedroom (Room 0)
     room = Room(
                 "You are in a bedroom. It is dark and dusty.\nAll the windows are boarded shut. "
-                "There are doors to the east and west. The door to the east seems to be locked...",
+                "There are doors to the east and west. The door to the east has a combination lock.",
                 None,
                 None,
                 None,
@@ -209,7 +209,7 @@ def main():
 
             if next_room is None:
                 print()
-                print("You can't walk through walls.")
+                print("You can't go that way.")
 
             else:
                 current_room = next_room
@@ -222,7 +222,7 @@ def main():
 
             if next_room is None:
                 print()
-                print("There is no where to go that way.")
+                print("You can't go that way.")
 
             else:
                 current_room = next_room
@@ -241,23 +241,27 @@ def main():
                 current_room = next_room
 
         # Moving up
-        elif action.lower() == "up" or action.lower() == "upstairs":
+        elif action.lower() == "up" or action.lower() == "upstairs" or action.lower() == "go upstairs" or action.lower() == "go up"\
+                or action.lower() == "walk upstairs" or action.lower() == "walk up" or action.lower() == "move upstairs"\
+                or action.lower() == "move up":
             next_room = room_list[current_room].up
 
             if next_room is None:
                 print()
-                print("Walking that way isn't helpful.")
+                print("You can't go that way.")
 
             else:
                 current_room = next_room
 
         # Moving down
-        elif action.lower() == "down" or action.lower() == "downstairs":
+        elif action.lower() == "down" or action.lower() == "downstairs" or action.lower() == "go downstairs" or action.lower() == "go down"\
+                or action.lower() == "walk downstairs" or action.lower() == "walk down" or action.lower() == "move downstairs"\
+                or action.lower() == "move down":
             next_room = room_list[current_room].down
 
             if next_room is None:
                 print()
-                print("There is no where to go that way.")
+                print("You can't go that way.")
 
             else:
                 current_room = next_room
@@ -315,7 +319,7 @@ def main():
             if len(command_words) > 1:
                 # Bedroom lock
                 if current_room == 0:
-                    if command_words[1] == "51931165":
+                    if command_words[1] == "51931165" or command_words[1] == "5-19-3-11-6-5":
                         print()
                         print("The door unlocked.")
                         room_list[0].east = 1
@@ -381,23 +385,27 @@ def main():
                 # Place door knob
                 elif command_words[1].lower() == "doorknob":
                     if item_list[7].room == -1:
-                        print()
-                        print("The door knob is now in place")
-                        item_list[7].room = None
-                        found_door_knob = True
-                        room_list[4].description = "You are in a living room. The television only tunes to static. The phone wire has been cut... " \
-                                                   "\nAbove the landline you can make out the number 406-758-9031." \
-                                                   "\nThere are doors to the north and south. " \
-                                                   "\nThe house's front door seems to be to the west. It's chained shut..."
-
-                        if found_door_knob and used_bolt_cutters:
+                        if current_room == 4:
                             print()
-                            print("It seems the door can be opened now...")
-
-                            room_list[4].west = 10
+                            print("The door knob is now in place")
+                            item_list[7].room = None
+                            found_door_knob = True
                             room_list[4].description = "You are in a living room. The television only tunes to static. The phone wire has been cut... " \
                                                        "\nAbove the landline you can make out the number 406-758-9031." \
-                                                       "\nThere are doors to the north and south. The house's front door seems to be to the west."
+                                                       "\nThere are doors to the north and south. " \
+                                                       "\nThe house's front door seems to be to the west. It's chained shut..."
+                        else:
+                            print()
+                            print("There is nowhere to place a doorknob here.")
+
+                            if found_door_knob and used_bolt_cutters:
+                                print()
+                                print("It seems the door can be opened now...")
+
+                                room_list[4].west = 10
+                                room_list[4].description = "You are in a living room. The television only tunes to static. The phone wire has been cut... " \
+                                                           "\nAbove the landline you can make out the number 406-758-9031." \
+                                                           "\nThere are doors to the north and south. The house's front door seems to be to the west."
                     else:
                         print()
                         print("You don't have a doorknob.")
@@ -431,7 +439,6 @@ def main():
                         if current_room == 2:
                             print()
                             print("You switch on the flashlight. You can now see that there is a door to the south.")
-                            item_list[3].room = None
                             room_list[2].description = "You are in a dark basement. It smells musty down here." \
                                                        "\nThere is a door to the south and an exit up the stairs."
                         else:
